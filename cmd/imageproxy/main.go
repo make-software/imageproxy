@@ -66,8 +66,8 @@ func main() {
 	if *denyHosts != "" {
 		p.DenyHosts = strings.Split(*denyHosts, ",")
 	}
-	if *referrers != "" {
-		p.Referrers = strings.Split(*referrers, ",")
+	if referrersValue := GetFlagOrEnvValue(referrers, "REFERRERS_HOST"); referrersValue != "" {
+		p.Referrers = strings.Split(referrersValue, ",")
 	}
 	if *contentTypes != "" {
 		p.ContentTypes = strings.Split(*contentTypes, ",")

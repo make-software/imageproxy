@@ -20,6 +20,7 @@ COPY --from=build /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/ca-certifica
 COPY --from=build /app/imageproxy /app/imageproxy
 
 ENV ALLOWED_HOST=''
+ENV REFERRERS_HOST=''
 
 USER go
 
