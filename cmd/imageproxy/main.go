@@ -59,8 +59,9 @@ func main() {
 	flag.Parse()
 
 	p := imageproxy.NewProxy(nil, cache.Cache)
-	if *allowHosts != "" {
-		p.AllowHosts = strings.Split(*allowHosts, ",")
+
+	if allowHostValue := GetFlagOrEnvValue(allowHosts, "ALLOWED_HOST"); allowHostValue != "" {
+		p.AllowHosts = strings.Split(allowHostValue, ",")
 	}
 	if *denyHosts != "" {
 		p.DenyHosts = strings.Split(*denyHosts, ",")
@@ -214,4 +215,11 @@ func diskCache(path string) *diskcache.Cache {
 		Transform: func(s string) []string { return []string{s[0:2], s[2:4]} },
 	})
 	return diskcache.NewWithDiskv(d)
+}
+
+func GetFlagOrEnvValue(flag *string, env string) string {
+	if *flag != "" {
+		return *flag
+	}
+	return os.Getenv(env)
 }

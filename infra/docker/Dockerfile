@@ -19,6 +19,8 @@ COPY --from=build /usr/share/zoneinfo /usr/share/zoneinfo
 COPY --from=build /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/ca-certificates.crt
 COPY --from=build /app/imageproxy /app/imageproxy
 
+ENV ALLOWED_HOST=''
+
 USER go
 
 CMD ["-addr", "0.0.0.0:8080"]
