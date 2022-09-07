@@ -233,6 +233,10 @@ func (p *Proxy) serveImage(w http.ResponseWriter, r *http.Request) {
 
 	copyHeader(w.Header(), resp.Header, "Cache-Control", "Last-Modified", "Expires", "Etag", "Link")
 
+	if req.Options.TTL != 0 {
+		w.Header().Set("Cache-Control", fmt.Sprintf("max-age=%d", req.Options.TTL))
+	}
+
 	if should304(r, resp) {
 		w.WriteHeader(http.StatusNotModified)
 		return
