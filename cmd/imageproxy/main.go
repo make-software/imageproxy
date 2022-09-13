@@ -32,7 +32,7 @@ import (
 
 const defaultMemorySize = 100
 
-var addr = flag.String("addr", "localhost:8080", "TCP address to listen on")
+var addr = flag.String("addr", "localhost:80", "TCP address to listen on")
 var allowHosts = flag.String("allowHosts", "", "comma separated list of allowed remote hosts")
 var denyHosts = flag.String("denyHosts", "", "comma separated list of denied remote hosts")
 var referrers = flag.String("referrers", "", "comma separated list of allowed referring hosts")

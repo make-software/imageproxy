@@ -24,7 +24,7 @@ ENV REFERRERS_HOST=''
 
 USER go
 
-CMD ["-addr", "0.0.0.0:8080"]
+CMD ["-addr", "0.0.0.0:80"]
 ENTRYPOINT ["/app/imageproxy"]
 
 EXPOSE 8080
