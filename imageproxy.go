@@ -312,6 +312,7 @@ var (
 // allowed.
 func (p *Proxy) allowed(r *Request) error {
 	if len(p.Referrers) > 0 && !referrerMatches(p.Referrers, r.Original) {
+		log.Println("Allowed Referrers : ", p.Referrers)
 		return errReferrer
 	}
 
@@ -381,6 +382,7 @@ func referrerMatches(hosts []string, r *http.Request) bool {
 	if err != nil { // malformed or blank header, just deny
 		return false
 	}
+	log.Printf("Reffer URL: %s\n", u.String())
 
 	return hostMatches(hosts, u)
 }
