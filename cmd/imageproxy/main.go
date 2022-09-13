@@ -69,8 +69,8 @@ func main() {
 	if referrersValue := GetFlagOrEnvValue(referrers, "REFERRERS_HOST"); referrersValue != "" {
 		p.Referrers = strings.Split(referrersValue, ",")
 	}
-	if *contentTypes != "" {
-		p.ContentTypes = strings.Split(*contentTypes, ",")
+	if contentTypesValue := GetFlagOrEnvValue(contentTypes, "CONTENT_TYPES"); contentTypesValue != "" {
+		p.ContentTypes = strings.Split(contentTypesValue, ",")
 	}
 	if *passRequestHeaders != "" {
 		p.PassRequestHeaders = strings.Split(*passRequestHeaders, ",")

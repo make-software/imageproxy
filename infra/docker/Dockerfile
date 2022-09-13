@@ -21,6 +21,7 @@ COPY --from=build /app/imageproxy /app/imageproxy
 
 ENV ALLOWED_HOST=''
 ENV REFERRERS_HOST=''
+ENV CONTENT_TYPES=''
 
 USER go
 
