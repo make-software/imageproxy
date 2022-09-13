@@ -218,8 +218,12 @@ func diskCache(path string) *diskcache.Cache {
 }
 
 func GetFlagOrEnvValue(flag *string, env string) string {
+	if env := os.Getenv(env); env != "" {
+		return env
+	}
+
 	if *flag != "" {
 		return *flag
 	}
-	return os.Getenv(env)
+	return ""
 }
