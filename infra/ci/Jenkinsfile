@@ -11,7 +11,8 @@ pipeline {
     app = 'imageproxy'
     dockerImage = '/$app'
     GIT_HASH = GIT_COMMIT.take(7)
-    AWS_DEFAULT_REGION = 'us-east-1'
+    DEV_REFERRERS_HOST = 'casper-explorer.dev.make.services'
+    STG_REFERRERS_HOST = 'casper-explorer.stg.make.services'
   }
 
   stages {
@@ -85,7 +86,7 @@ pipeline {
         }
       steps {
         dir(path: 'casper-infra') {
-          sh 'cd ./kubernetes/environment/$env/$app && pwd && ls -la && sed -i "s|/$app.*|/$app:$GIT_HASH|g" $app.yaml'
+          sh 'cd ./kubernetes/environment/$env/$app && pwd && ls -la && sed -i "s|/$app.*|/$app:$GIT_HASH|g" $app.yaml && sed -i "s|value: \"\"|value: \"$DEV_REFERRERS_HOST\"|g" $app.yaml'
           sh 'git commit -am "$app-$env hash $GIT_HASH releasing from branch $BRANCH_NAME" && chmod a+x ../infra/ci/push.sh && ../infra/ci/push.sh || echo \'no changes\''
         }
       }
@@ -98,7 +99,7 @@ pipeline {
         }
       steps {
         dir(path: 'casper-infra') {
-          sh 'cd ./kubernetes/environment/$env/$app && pwd && ls -la && sed -i "s|/$app.*|/$app:$VER-$GIT_HASH|g" $app.yaml'
+          sh 'cd ./kubernetes/environment/$env/$app && pwd && ls -la && sed -i "s|/$app.*|/$app:$VER-$GIT_HASH|g" $app.yaml && sed -i "s|value: \"\"|value: \"$STG_REFERRERS_HOST\"|g" $app.yaml'
           sh 'git commit -am "$app-$env v$VER releasing from branch $BRANCH_NAME" && chmod a+x ../infra/ci/push.sh && ../infra/ci/push.sh || echo \'no changes\''
         }
       }
