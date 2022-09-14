@@ -91,19 +91,19 @@ pipeline {
       }
     }
 
-//     stage('STG') {
-//       when { branch 'rc-*' }
-//         environment {
-//           env = 'stg'
-//         }
-//       steps {
-//         dir(path: 'casper-infra') {
-//           sh 'cd ./kubernetes/environment/$env/$app && pwd && ls -la && sed -i "s|/$app.*|/$app:$VER-$GIT_HASH|g" $app.yaml'
-//           sh 'git commit -am "$app-$env v$VER releasing from branch $BRANCH_NAME" && chmod a+x ../ci/push.sh && ../ci/push.sh || echo \'no changes\''
-//         }
-//       }
-//     }
-//  }
+    stage('STG') {
+      when { branch 'rc-*' }
+        environment {
+          env = 'stg'
+        }
+      steps {
+        dir(path: 'casper-infra') {
+          sh 'cd ./kubernetes/environment/$env/$app && pwd && ls -la && sed -i "s|/$app.*|/$app:$GIT_HASH|g" $app.yaml'
+          sh 'git commit -am "$app-$env hash $GIT_HASH releasing from branch $BRANCH_NAME" && chmod a+x ../ci/push.sh && ../ci/push.sh || echo \'no changes\''
+        }
+      }
+    }
+ }
 
    }
 }
