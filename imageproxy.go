@@ -28,6 +28,7 @@ import (
 	"github.com/gregjones/httpcache"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
+
 	tphttp "willnorris.com/go/imageproxy/third_party/http"
 )
 
@@ -92,6 +93,9 @@ type Proxy struct {
 	// PassRequestHeaders identifies HTTP headers to pass from inbound
 	// requests to the proxied server.
 	PassRequestHeaders []string
+
+	// AllowedResponsesToCache represents HTTP response codes allowed to be cached
+	AllowedResponsesToCache []int
 }
 
 // NewProxy constructs a new proxy.  The provided http RoundTripper will be
@@ -234,7 +238,9 @@ func (p *Proxy) serveImage(w http.ResponseWriter, r *http.Request) {
 	copyHeader(w.Header(), resp.Header, "Cache-Control", "Last-Modified", "Expires", "Etag", "Link")
 
 	if req.Options.TTL != 0 {
-		w.Header().Set("Cache-Control", fmt.Sprintf("max-age=%d", req.Options.TTL))
+		if p.allowedResponseToCache(resp.StatusCode) {
+			w.Header().Set("Cache-Control", fmt.Sprintf("max-age=%d", req.Options.TTL))
+		}
 	}
 
 	if should304(r, resp) {
@@ -460,6 +466,16 @@ func (p *Proxy) logf(format string, v ...interface{}) {
 	} else {
 		log.Printf(format, v...)
 	}
+}
+
+func (p *Proxy) allowedResponseToCache(resp int) bool {
+	for _, r := range p.AllowedResponsesToCache {
+		if r == resp {
+			return true
+		}
+	}
+
+	return false
 }
 
 // TransformingTransport is an implementation of http.RoundTripper that

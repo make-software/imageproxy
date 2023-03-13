@@ -13,7 +13,6 @@ require (
 	github.com/disintegration/imaging v1.6.2
 	github.com/dnaeon/go-vcr v1.2.0 // indirect
 	github.com/fcjr/aia-transport-go v1.2.2
-	github.com/form3tech-oss/jwt-go v3.2.5+incompatible // indirect
 	github.com/gofrs/uuid v4.2.0+incompatible // indirect
 	github.com/golang-jwt/jwt/v4 v4.3.0 // indirect
 	github.com/golang/groupcache v0.0.0-20210331224755-41bb18bfe9da // indirect
