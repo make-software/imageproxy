@@ -71,20 +71,6 @@ func main() {
 		p.Referrers = strings.Split(referrersValue, ",")
 	}
 
-	if allowedCacheResponses := GetFlagOrEnvValue(referrers, "ALLOWED_CACHE_RESPONSE"); allowedCacheResponses != "" {
-		responses := make([]int, 0)
-
-		for _, resp := range strings.Split(allowedCacheResponses, ",") {
-			code, err := strconv.Atoi(resp)
-			if err != nil {
-				log.Fatalf("error: invalid `ALLOWED_CACHE_RESPONSE` value provided: %v", err)
-			}
-			responses = append(responses, code)
-		}
-
-		p.AllowedResponsesToCache = responses
-	}
-
 	if contentTypesValue := GetFlagOrEnvValue(contentTypes, "CONTENT_TYPES"); contentTypesValue != "" {
 		p.ContentTypes = strings.Split(contentTypesValue, ",")
 	}

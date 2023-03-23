@@ -93,9 +93,6 @@ type Proxy struct {
 	// PassRequestHeaders identifies HTTP headers to pass from inbound
 	// requests to the proxied server.
 	PassRequestHeaders []string
-
-	// AllowedResponsesToCache represents HTTP response codes allowed to be cached
-	AllowedResponsesToCache []int
 }
 
 // NewProxy constructs a new proxy.  The provided http RoundTripper will be
@@ -238,7 +235,9 @@ func (p *Proxy) serveImage(w http.ResponseWriter, r *http.Request) {
 	copyHeader(w.Header(), resp.Header, "Cache-Control", "Last-Modified", "Expires", "Etag", "Link")
 
 	if req.Options.TTL != 0 {
-		if p.allowedResponseToCache(resp.StatusCode) {
+		if resp.StatusCode != http.StatusOK {
+			w.Header().Set("Cache-Control", "stale-if-error=0")
+		} else {
 			w.Header().Set("Cache-Control", fmt.Sprintf("max-age=%d", req.Options.TTL))
 		}
 	}
@@ -466,16 +465,6 @@ func (p *Proxy) logf(format string, v ...interface{}) {
 	} else {
 		log.Printf(format, v...)
 	}
-}
-
-func (p *Proxy) allowedResponseToCache(resp int) bool {
-	for _, r := range p.AllowedResponsesToCache {
-		if r == resp {
-			return true
-		}
-	}
-
-	return false
 }
 
 // TransformingTransport is an implementation of http.RoundTripper that
