@@ -24,6 +24,7 @@ import (
 	"github.com/gregjones/httpcache/diskcache"
 	rediscache "github.com/gregjones/httpcache/redis"
 	"github.com/peterbourgon/diskv"
+
 	"willnorris.com/go/imageproxy"
 	"willnorris.com/go/imageproxy/internal/gcscache"
 	"willnorris.com/go/imageproxy/internal/s3cache"
@@ -69,6 +70,7 @@ func main() {
 	if referrersValue := GetFlagOrEnvValue(referrers, "REFERRERS_HOST"); referrersValue != "" {
 		p.Referrers = strings.Split(referrersValue, ",")
 	}
+
 	if contentTypesValue := GetFlagOrEnvValue(contentTypes, "CONTENT_TYPES"); contentTypesValue != "" {
 		p.ContentTypes = strings.Split(contentTypesValue, ",")
 	}

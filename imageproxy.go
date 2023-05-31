@@ -28,6 +28,7 @@ import (
 	"github.com/gregjones/httpcache"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
+
 	tphttp "willnorris.com/go/imageproxy/third_party/http"
 )
 
@@ -234,7 +235,11 @@ func (p *Proxy) serveImage(w http.ResponseWriter, r *http.Request) {
 	copyHeader(w.Header(), resp.Header, "Cache-Control", "Last-Modified", "Expires", "Etag", "Link")
 
 	if req.Options.TTL != 0 {
-		w.Header().Set("Cache-Control", fmt.Sprintf("max-age=%d", req.Options.TTL))
+		if resp.StatusCode != http.StatusOK {
+			w.Header().Set("Cache-Control", "stale-if-error=0")
+		} else {
+			w.Header().Set("Cache-Control", fmt.Sprintf("max-age=%d", req.Options.TTL))
+		}
 	}
 
 	if should304(r, resp) {
