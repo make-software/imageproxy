@@ -169,6 +169,7 @@ func (p *Proxy) serveImage(w http.ResponseWriter, r *http.Request) {
 
 	if err := p.allowed(req); err != nil {
 		p.logf("%s: %v", err, req)
+		w.Header().Set("Cache-Control", "no-cache")
 		http.Error(w, msgNotAllowed, http.StatusForbidden)
 		return
 	}
