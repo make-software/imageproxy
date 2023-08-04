@@ -223,6 +223,7 @@ func (p *Proxy) serveImage(w http.ResponseWriter, r *http.Request) {
 	}
 	// close the original resp.Body, even if we wrap it in a NopCloser below
 	defer resp.Body.Close()
+	p.logf("request: %+v finished with status code: %d", *actualReq, resp.StatusCode)
 
 	cached := resp.Header.Get(httpcache.XFromCache) == "1"
 	if p.Verbose {
